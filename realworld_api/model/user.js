@@ -3,7 +3,6 @@ const { baseModel } = require('./base-model')
 
 const userSchema = mongoose.Schema({
     ...baseModel,
-
     username: {
         type: String,
         required: true
@@ -16,7 +15,8 @@ const userSchema = mongoose.Schema({
 
     password: {
         type: String,
-        required: true
+        required: true,
+        select: false
     },
 
     bio: {

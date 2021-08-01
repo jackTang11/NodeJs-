@@ -64,5 +64,51 @@ const router = require('./router')
 //所有接口都以/api开头  配置路由中间件
 app.use('/api', router)
 ```
+### 数据验证
+
+```
+npm i express-validator
+
+   body('user.password').notEmpty().withMessage('密码不能为空'),
+    body('user.email').notEmpty().withMessage('邮箱不能为空')
+        .bail()//上面都可以通过，才能继续走下面
+        .custom(async email => { //自定义验证，查询是否存在邮箱，此查询操作为异步
+            const user = await User.findOne({ email })
+            if (user) { //如果存在，直接返回
+                return Promise.reject('邮箱已存在')
+            }
+        })
 
 
+
+    //获取上面验证的结果
+    const errors = validationResult(req)
+    console.log(errors);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            errors: errors.array()
+        })
+    }
+    next()    
+
+```
+> 提取校验中间件 
+```
+https://express-validator.github.io/docs/running-imperatively.html  
+Running validations imperatively
+
+const { validationResult } = require('express-validator');
+
+module.exports = validations => {
+    return async (req, res, next) => {
+        await Promise.all(validations.map(validation => validation.run(req)));
+
+        const errors = validationResult(req);
+        if (errors.isEmpty()) {
+            return next();
+        }
+
+        res.status(400).json({ errors: errors.array() });
+    };
+};
+```

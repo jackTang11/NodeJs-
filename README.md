@@ -187,3 +187,38 @@ res.render('index.art', {
         }
     });
 ```
+
+> Express
+
+```
+中间件其实就是可以访问请求对象 响应对象以及Next（）方法的函数,一定要注意顺序
+
+//利用中间件，获取log 信息
+// 中间件的顺序很重
+// 中间件的三个参数  req,res,next
+app.use((req,res,next) => {
+   console.log(req.method,req.url,Date.now());
+   next()//继续执行
+})
+
+
+express
+应用程序级别的中间件
+限定请求方法加请求路径
+app.use(
+    (req,res,next) => {},
+    (req,res,next) => {}
+)
+
+//挂载路由
+// app.use(router)
+
+//给路由限定前缀
+app.use('/todos',router)
+
+//错误处理中间件
+app.use((err, req, res, next) => {
+
+})
+
+```

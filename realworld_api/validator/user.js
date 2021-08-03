@@ -8,8 +8,6 @@ exports.register = validator([
         .notEmpty().withMessage('用户名不能为空')
         .custom(async username => { //自定义验证，查询是否存在用户名，此查询操作为异步
             const user = await User.findOne({ username })
-            console.log('================');
-            console.log(username);
             if (user) { //如果存在，直接返回
                 return Promise.reject('用户名已存在')
             }
@@ -35,16 +33,17 @@ exports.login = [
 
     validator([
         body('user.email').custom(async (email, { req }) => { //自定义验证，查询是否存在用户名，此查询操作为异步
-            const user = await User.findOne({ email })
+            const user = await User.findOne({ email }).set(['email', 'username', 'bio', 'image', 'password'])
             if (!user) { //如果存在，直接返回
                 return Promise.reject('用户名不存在')
             }
+            //将数据挂载到请求对象中
             req.user = user
         }),
     ]),
     validator([
-        body('user.password').custom(async password => { //自定义验证，查询是否存在邮箱，此查询操作为异步
-            console.log(req.user);
+        body('user.password').custom(async (password, { req }) => { //自定义验证，查询是否存在邮箱，此查询操作为异步
+            console.log(req.user.toJSON());
             if (md5(password) !== req.user.password) { //如果存在，直接返回
                 return Promise.reject('密码错误')
             }

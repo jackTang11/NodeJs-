@@ -1,32 +1,16 @@
 const express = require('express')
+const articleCtrl = require('../controller/article')
+const auth = require('../middleware/auth')
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-    try {
-        res.send('get /')
-    } catch (error) {
-        next(error)
-    }
-})
+router.get('/:slug', articleCtrl.getArticle)
 
+// 创建文章
+router.post('/', auth, articleCtrl.createArticle)
 
-router.get('/feed', async (req, res, next) => {
-    try {
-        res.send('post feed')
-    } catch (error) {
-        next(error)
-    }
-})
-
-
-router.get('/:slug', async (req, res, next) => {
-    try {
-        res.send('获取文章')
-    } catch (error) {
-        next(error)
-    }
-})
+// 更新文章
+router.put('/:slug', articleCtrl.updateArticle)
 
 module.exports = router;
 

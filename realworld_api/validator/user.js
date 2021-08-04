@@ -41,6 +41,7 @@ exports.login = [
             req.user = user
         }),
     ]),
+
     validator([
         body('user.password').custom(async (password, { req }) => { //自定义验证，查询是否存在邮箱，此查询操作为异步
             console.log(req.user.toJSON());

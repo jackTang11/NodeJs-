@@ -33,8 +33,10 @@ exports.getArticle = async (req, res, next) => {
 // 创建文章
 exports.createArticle = async (req, res, next) => {
     try {
-        // 处理请求
-        res.send('createArticle')
+        const article = new Article(req.body.article)
+
+
+
     } catch (err) {
         next(err)
     }

@@ -11,6 +11,6 @@ router.post('/users', userValidator.register, userControll.register)
 //获取用户
 router.get('/user', auth, userControll.getCurrentUser)
 //更新
-router.post('/user', auth, userControll.updateCurrents)
+router.post('/user', auth, userControll.updateCurrentUser)
 
 module.exports = router
